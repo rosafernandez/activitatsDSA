@@ -3,37 +3,41 @@ package edu.upc.eetac.dsa;
 /**
  * Created by rosa on 10/10/2016.
  */
-public class UserDao extends DAO{
-    public String name, address;
-    public int id;
+//code-generate-gettersandsetters
+public class User {
+    public String Name;
+    public String Address;
+    public int Id;
 
-    public UserDao(String name, String address, int id) {
-        this.name = name;
-        this.address = address;
-        this.id = id;
+    public User(String Name, String Address, int Id) {
+        this.Name = Name; //name negre el q li pases per parametre, name lila el d la clase.
+        this.Address = Address;
+        this.Id = Id;
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        Name = name;
     }
 
     public String getAddress() {
-        return address;
+        return Address;
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        Address = address;
     }
 
     public int getId() {
-        return id;
+        return Id;
     }
 
     public void setId(int id) {
-        this.id = id;
+        Id = id;
     }
 }
+
+
