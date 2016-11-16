@@ -1,9 +1,6 @@
 package edu.upc.eetac.dsa;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
 import java.util.List;
 
@@ -16,11 +13,21 @@ public class ThreadServidor extends Thread {
     protected DataOutputStream sortidaClient;
     BufferedReader entrada;
     String missatgeClient;
+    int client1;
 
     public ThreadServidor(Socket cs, List<Socket> llistaSockets){
         this.cs=cs;
         this.llistaSockets=llistaSockets;
     }
+    private int client() {
+        for (int i=0; i< llistaSockets.size(); i++){
+            if (cs == llistaSockets.get(i)){
+                client1= i+1;
+            }
+        }
+        return client1;
+    }
+
     public void run() {
         try {
             entrada = new BufferedReader(new InputStreamReader(cs.getInputStream()));
@@ -29,15 +36,21 @@ public class ThreadServidor extends Thread {
         }
         while (true) {
             try {
+                int client;
+                int a=1;
                 missatgeClient= entrada.readLine();
-                System.out.println(missatgeClient);//missatge rebut del client
-                for(int i=0;i<llistaSockets.size();i++) {
-                    if(cs == llistaSockets.get(i))
-                        continue; /*el servidor enviarà els textos rebuts a totes les conexions de la seva llista excepte
+                for (int i=0; i< llistaSockets.size();i++){
+                    client = client();
+                    if(cs == llistaSockets.get(i)){
+                        continue;} /*el servidor enviarà els textos rebuts a totes les conexions de la seva llista excepte
                                     a la conexió per on ha rebut el text. Aixo evitarà que un client rebi el mateix text q acaba de enviar */
-
+                    String st= Integer.toString(client);
                     sortidaClient = new DataOutputStream(llistaSockets.get(i).getOutputStream());
-                    sortidaClient.writeUTF(missatgeClient);
+                    sortidaClient.writeUTF("client "+st+": "+missatgeClient);
+                    if (a==1) {
+                        System.out.println("client " + st + ": " + missatgeClient);
+                        a++;
+                    }
                 }
             }
             catch (Exception e) {

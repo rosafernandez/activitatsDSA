@@ -21,7 +21,7 @@ public class EscripturaClient extends Thread{
             try {
                 sortidaClient = new DataOutputStream(cs.getOutputStream());
                 missatge = scanner.nextLine();
-                sortidaClient.writeUTF(missatge + "\n"); //envío mensaje al servidor
+                sortidaClient.writeBytes(missatge + "\n"); //envío mensaje al servidor
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
