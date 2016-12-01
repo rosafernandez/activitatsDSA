@@ -41,7 +41,11 @@ public class ThreadServidor extends Thread {
                 missatgeClient= entrada.readLine();
                 for (int i=0; i< llistaSockets.size();i++){
                     client = client();
-                    if(cs == llistaSockets.get(i)){
+                    if (llistaSockets.size()==1){
+                        System.out.println("client 1: " + missatgeClient);
+                        continue;
+                    }
+                    else if(cs == llistaSockets.get(i)){
                         continue;} /*el servidor enviarà els textos rebuts a totes les conexions de la seva llista excepte
                                     a la conexió per on ha rebut el text. Aixo evitarà que un client rebi el mateix text q acaba de enviar */
                     String st= Integer.toString(client);

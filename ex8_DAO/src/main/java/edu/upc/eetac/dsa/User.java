@@ -38,5 +38,13 @@ public class User extends DAO{
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public String toString(){
+        StringBuffer sb = new StringBuffer();
+        sb.append("id: ").append(this.getId());
+        sb.append("\nname: ").append(this.getName());
+        sb.append("\naddress: ").append(this.getAddress());
+        return sb.toString();
+    }
 }
 

@@ -16,13 +16,13 @@ import java.util.Properties;
 
 public abstract class DAO {
 
-    public Connection getConnection() {
+    public static Connection getConnection() {
         Connection con=null;
         try
         {
             String host = "localhost";
             int port = 3306;
-            String database = "dao";
+            String database = "dao"; //posar el nom d la bbdd q faci servir!!!!
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             String url = "jdbc:mysql://" + host + ":" + port + "/" + database;
@@ -32,7 +32,7 @@ public abstract class DAO {
             info.setProperty("useSSL", "false");
             info.setProperty("serverTimezone", "UTC");
             con = DriverManager.getConnection(url, info);
-            System.out.println("Conexion creada.");
+            System.out.println("Conexion creada.\n");
         }
         catch (Exception e)
         {e.printStackTrace();}
@@ -61,6 +61,7 @@ public abstract class DAO {
     }
 
     //la funció insterarElementos insereix els valors en els "?"
+
     public void insertarElementos (PreparedStatement preparedStatement) throws NoSuchMethodException, SQLException, InvocationTargetException, IllegalAccessException {
         int i = 1;
         Field[] fields = this.getClass().getFields();
@@ -80,6 +81,7 @@ public abstract class DAO {
 
 
     //funció per INSERTAR elements a les taules
+
     public void insert() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         StringBuffer sb = new StringBuffer();
         sb.append("INSERT INTO ").append(this.getClass().getSimpleName());
@@ -122,10 +124,10 @@ public abstract class DAO {
         }
     }
 
-    //SELECT d'un departament o un usuari filtrant per la primary key (id)
-    public void select(int pk){
+    //SELECT d'un departament o un usuari filtrant per el id
+    public void select(int id){
         StringBuffer sb = new StringBuffer();
-        sb.append("SELECT * FROM ").append(this.getClass().getSimpleName()).append(" WHERE ID = ").append(pk);
+        sb.append("SELECT * FROM ").append(this.getClass().getSimpleName()).append(" WHERE ID = ").append(id);
         System.out.println("QUERY: "+sb.toString());
 
         Connection con = getConnection();
@@ -157,7 +159,7 @@ public abstract class DAO {
         }
     }
 
-    //SELECT un usuari filtrant per name i address q no són primary key
+    //SELECT un usuari filtrant per name i address
 
     public void select2(String name, String address){
         StringBuffer sb = new StringBuffer();
@@ -236,10 +238,12 @@ public abstract class DAO {
         }
     }
 
-    //DELETE: eliminar un usuari o un departament filtrant per id (primary key)
-    public void delete(int pk){
+    //DELETE: eliminar un usuari o un departament filtrant per id
+    public void delete(){
         StringBuffer sb = new StringBuffer();
-        sb.append("DELETE FROM ").append(this.getClass().getSimpleName()).append(" WHERE ID="+pk);
+        Field[] fields = this.getClass().getDeclaredFields();
+        int id = Integer.parseInt(getValors(fields[0]));
+        sb.append("DELETE FROM ").append(this.getClass().getSimpleName()).append(" WHERE ID=" +id);
         System.out.println("QUERY: "+sb.toString());
         Connection con = getConnection();
 
@@ -253,8 +257,8 @@ public abstract class DAO {
 
     }
 
-    //funció getAllUsers q retorna tots els usuaris en una llista
-    public List<User> getAllUsers() throws SQLException {
+    //funció getAllUsers q retorna tots els usuaris en una llista ordenats pel nom
+    public static List<User> getAllUsers() throws SQLException {
         Connection con = getConnection();
         Statement stmt= null;
         try {
@@ -262,12 +266,38 @@ public abstract class DAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        ResultSet rs= stmt.executeQuery("SELECT * FROM User");
+        ResultSet rs= stmt.executeQuery("SELECT * FROM User ORDER BY name");
         List<User> lista = new ArrayList<User>();
         while (rs.next()){
             User user = new User(rs.getInt("id"),rs.getString("name"),rs.getString("address"));
             lista.add(user);
-            System.out.println(user);
+        }
+        //System.out.println(lista);
+        for (User u:lista){
+            System.out.println(u+ "\n");
+        }
+        return lista;
+    }
+
+    //funció q mostra els users q tenen address
+
+    public static List<User> getAllUsersWithAddress() throws SQLException {
+        Connection con = getConnection();
+        Statement stmt= null;
+        try {
+            stmt = con.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        ResultSet rs= stmt.executeQuery("SELECT * FROM User WHERE address !=''");
+        List<User> lista = new ArrayList<User>();
+        while (rs.next()){
+            User user = new User(rs.getInt("id"),rs.getString("name"),rs.getString("address"));
+            lista.add(user);
+        }
+        //System.out.println(lista);
+        for (User u:lista){
+            System.out.println(u+ "\n");
         }
         return lista;
     }

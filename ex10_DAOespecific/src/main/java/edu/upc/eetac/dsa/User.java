@@ -4,7 +4,7 @@ package edu.upc.eetac.dsa;
  * Created by rosa on 10/10/2016.
  */
 //creo la classe User amb els seus atributs, el constructor i els getters i setters (code-> generate)
-public class User extends DAO{
+public class User extends UserDAO{
     public int id;
     public String name, address;
 

@@ -6,7 +6,11 @@
 
     <groupId>edu.upc.eetac.dsa</groupId>
     <artifactId>DSA-master</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>ex10_DAOespecific</module>
+    </modules>
 
     <dependencies>
     <dependency>

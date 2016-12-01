@@ -5,7 +5,7 @@ package edu.upc.eetac.dsa;
  */
 
 //creo la classe departament amb els seus atributs, el constructor i els getters i setters (code-> generate)
-public class Dept extends DAO{
+public class Dept extends DeptDAO{
     public int id, numEmpl;
     public String name, description;
 
